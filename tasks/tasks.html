@@ -1,0 +1,2633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Tasks | TaskFlow</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f7f5fc;
+            color: #211744;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font-family: inherit;
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ================================
+           MAIN DASHBOARD
+        ================================= */
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ================================
+           SIDEBAR
+        ================================= */
+
+        .sidebar {
+            width: 270px;
+            min-height: 100vh;
+            background: linear-gradient(
+                180deg,
+                #5420b8 0%,
+                #7029df 50%,
+                #873ce9 100%
+            );
+
+            color: white;
+            padding: 32px 20px 20px;
+
+            display: flex;
+            flex-direction: column;
+
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            box-shadow: 8px 0 30px rgba(84, 32, 184, 0.12);
+        }
+
+        /* LOGO */
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 4px 10px 48px;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+
+            background: rgba(255,255,255,0.18);
+
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .brand-text h1 {
+            font-size: 22px;
+            line-height: 1;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-text span {
+            display: block;
+            margin-top: 5px;
+
+            font-size: 11px;
+            letter-spacing: 0.5px;
+
+            opacity: 0.75;
+        }
+
+        /* MENU */
+
+        .menu-title {
+            margin: 0 10px 14px;
+
+            font-size: 12px;
+            font-weight: 600;
+
+            letter-spacing: 1.3px;
+
+            opacity: 0.6;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .menu-item {
+            height: 54px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 0 18px;
+
+            border-radius: 15px;
+
+            color: white;
+            text-decoration: none;
+
+            font-size: 15px;
+            font-weight: 500;
+
+            transition: 0.25s ease;
+        }
+
+        .menu-item:hover {
+            background: rgba(255,255,255,0.13);
+            transform: translateX(2px);
+        }
+
+        .menu-item.active {
+            background: rgba(255,255,255,0.18);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .menu-icon {
+            width: 22px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        /* USER */
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .user-profile {
+            padding: 14px;
+
+            border-radius: 18px;
+
+            background: rgba(255,255,255,0.14);
+
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 10px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+
+            border-radius: 50%;
+
+            background: white;
+            color: #7029df;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .user-info {
+            min-width: 0;
+        }
+
+        .username {
+            font-size: 14px;
+            font-weight: 700;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-status {
+            margin-top: 3px;
+
+            font-size: 11px;
+            opacity: 0.65;
+        }
+
+        /* LOGOUT */
+
+        .logout {
+            width: 100%;
+            height: 48px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: none;
+            border-radius: 14px;
+
+            background: rgba(255,255,255,0.14);
+
+            color: white;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            transition: 0.25s ease;
+        }
+
+        .logout:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+        }
+
+        /* ================================
+           MAIN CONTENT
+        ================================= */
+
+        .main-content {
+            margin-left: 270px;
+            width: calc(100% - 270px);
+
+            min-height: 100vh;
+
+            padding: 42px 42px 50px;
+        }
+
+        /* HEADER */
+
+        .top-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 34px;
+        }
+
+        .welcome h2 {
+            font-size: 32px;
+            line-height: 1.2;
+
+            letter-spacing: -1px;
+        }
+
+        .welcome p {
+            margin-top: 8px;
+
+            color: #8b82a4;
+
+            font-size: 15px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .date-box {
+            padding: 13px 18px;
+
+            background: white;
+
+            border: 1px solid #eee9f7;
+
+            border-radius: 13px;
+
+            color: #7d7396;
+
+            font-size: 13px;
+        }
+
+        .add-task-btn {
+            height: 46px;
+
+            padding: 0 22px;
+
+            border: none;
+            border-radius: 13px;
+
+            background: linear-gradient(
+                135deg,
+                #762ce5,
+                #8b3df0
+            );
+
+            color: white;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            box-shadow: 0 10px 24px rgba(118,44,229,0.24);
+
+            transition: 0.25s ease;
+        }
+
+        .add-task-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(118,44,229,0.3);
+        }
+
+        /* ================================
+           STAT CARDS
+        ================================= */
+
+        .stats-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 18px;
+
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: white;
+
+            border: 1px solid #eee9f7;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            min-height: 136px;
+
+            box-shadow: 0 8px 25px rgba(64,35,104,0.04);
+
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-label {
+            color: #9187a8;
+
+            font-size: 12px;
+            font-weight: 600;
+
+            text-transform: uppercase;
+        }
+
+        .stat-number {
+            margin-top: 10px;
+
+            font-size: 32px;
+            font-weight: 700;
+
+            color: #211744;
+        }
+
+        .stat-description {
+            margin-top: 4px;
+
+            color: #a29ab4;
+
+            font-size: 12px;
+        }
+
+        .stat-icon {
+            width: 46px;
+            height: 46px;
+
+            border-radius: 13px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 21px;
+
+            background: #f0e7ff;
+        }
+
+        .pending-icon {
+            background: #fff1db;
+        }
+
+        .progress-icon {
+            background: #e6f2ff;
+        }
+
+        .completed-icon {
+            background: #e3f7ee;
+        }
+
+        /* ================================
+           CONTENT GRID
+        ================================= */
+
+        .content-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.8fr)
+                minmax(280px, 0.8fr);
+
+            gap: 22px;
+        }
+
+        .card {
+            background: white;
+
+            border: 1px solid #eee9f7;
+
+            border-radius: 20px;
+
+            box-shadow: 0 8px 25px rgba(64,35,104,0.04);
+        }
+
+        /* TASKS CARD */
+
+        .tasks-card {
+            min-height: 430px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            height: 76px;
+
+            padding: 0 26px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            border-bottom: 1px solid #f0edf5;
+        }
+
+        .card-header h3 {
+            font-size: 19px;
+        }
+
+        .card-header span {
+            color: #9c91b0;
+            font-size: 12px;
+        }
+
+        /* TASK LIST */
+
+        .task-list {
+            padding: 8px 24px 20px;
+        }
+
+        .task-item {
+            min-height: 90px;
+
+            padding: 20px 4px;
+
+            border-bottom: 1px solid #f1eef5;
+
+            display: flex;
+            align-items: center;
+
+            gap: 14px;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-check {
+            width: 23px;
+            height: 23px;
+
+            border: 2px solid #d9ccef;
+
+            border-radius: 6px;
+
+            background: white;
+
+            flex-shrink: 0;
+
+            cursor: pointer;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transition: 0.2s;
+        }
+
+        .task-check:hover {
+            border-color: #7c32df;
+        }
+
+        .task-check.completed {
+            background: #7c32df;
+            border-color: #7c32df;
+            color: white;
+        }
+
+        .task-main {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: 16px;
+            font-weight: 700;
+
+            color: #26194b;
+        }
+
+        .task-title.completed {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        .task-description {
+            margin-top: 6px;
+
+            color: #9a91aa;
+
+            font-size: 12px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .task-meta {
+            margin-top: 10px;
+
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+
+            gap: 8px;
+        }
+
+        .badge {
+            padding: 6px 10px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fff2d8;
+            color: #d28b00;
+        }
+
+        .status-in-progress {
+            background: #e7f2ff;
+            color: #3483d8;
+        }
+
+        .status-completed {
+            background: #e4f7ee;
+            color: #2a9c69;
+        }
+
+        .priority-low {
+            color: #5f9b75;
+        }
+
+        .priority-medium {
+            color: #dc9a25;
+        }
+
+        .priority-high {
+            color: #df6464;
+        }
+
+        .due-date {
+            color: #9990aa;
+            font-size: 11px;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+
+            border: none;
+            border-radius: 11px;
+
+            background: #f5efff;
+
+            cursor: pointer;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 16px;
+
+            transition: 0.2s;
+        }
+
+        .icon-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .edit-btn {
+            background: #f1e8ff;
+        }
+
+        .delete-btn {
+            background: #fff0f0;
+        }
+
+        /* ================================
+           RIGHT SIDE
+        ================================= */
+
+        .side-column {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .progress-card {
+            padding: 25px;
+        }
+
+        .progress-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-heading h3 {
+            font-size: 18px;
+        }
+
+        .progress-percent {
+            color: #8135e7;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+
+            background: #eee8f5;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            margin-top: 20px;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+
+            background: linear-gradient(
+                90deg,
+                #762ce5,
+                #a55df2
+            );
+
+            border-radius: 20px;
+
+            transition: 0.4s ease;
+        }
+
+        .progress-text {
+            margin-top: 12px;
+
+            color: #9b91aa;
+
+            font-size: 12px;
+        }
+
+        /* QUICK ACTIONS */
+
+        .quick-card {
+            padding: 25px;
+        }
+
+        .quick-card h3 {
+            font-size: 18px;
+            margin-bottom: 18px;
+        }
+
+        .quick-action {
+            width: 100%;
+
+            min-height: 65px;
+
+            padding: 12px;
+
+            border: 1px solid #eee8f6;
+
+            border-radius: 14px;
+
+            background: #fff;
+
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            cursor: pointer;
+
+            text-align: left;
+
+            margin-bottom: 10px;
+
+            transition: 0.2s;
+        }
+
+        .quick-action:hover {
+            border-color: #d9c2ff;
+            background: #fcf9ff;
+            transform: translateY(-1px);
+        }
+
+        .quick-icon {
+            width: 38px;
+            height: 38px;
+
+            background: #f0e5ff;
+
+            border-radius: 11px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #7c31e2;
+
+            font-size: 20px;
+        }
+
+        .quick-text strong {
+            display: block;
+
+            color: #423360;
+
+            font-size: 13px;
+        }
+
+        .quick-text span {
+            display: block;
+
+            margin-top: 4px;
+
+            color: #a095b0;
+
+            font-size: 11px;
+        }
+
+        /* EMPTY */
+
+        .empty-state {
+            padding: 65px 20px;
+
+            text-align: center;
+
+            color: #9b91aa;
+        }
+
+        .empty-icon {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h3 {
+            color: #3b2c58;
+            margin-bottom: 6px;
+        }
+
+        /* ================================
+           MODAL
+        ================================= */
+
+        .modal {
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(31, 18, 58, 0.48);
+
+            display: none;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            z-index: 1000;
+
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 520px;
+
+            background: white;
+
+            border-radius: 22px;
+
+            padding: 28px;
+
+            box-shadow: 0 25px 70px rgba(30,15,60,0.2);
+
+            animation: modalIn 0.2s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 24px;
+        }
+
+        .modal-header h2 {
+            font-size: 22px;
+        }
+
+        .close-modal {
+            width: 36px;
+            height: 36px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #f5f1fa;
+
+            cursor: pointer;
+
+            font-size: 20px;
+
+            color: #71677e;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #4b3c63;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+
+            border: 1px solid #e5deee;
+
+            border-radius: 12px;
+
+            padding: 12px 14px;
+
+            outline: none;
+
+            color: #33264d;
+
+            background: #fff;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+        .form-group textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #8538e7;
+
+            box-shadow: 0 0 0 3px rgba(133,56,231,0.08);
+        }
+
+        .form-row {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 14px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+
+            gap: 10px;
+
+            margin-top: 22px;
+        }
+
+        .cancel-btn,
+        .save-btn {
+            height: 44px;
+
+            padding: 0 20px;
+
+            border-radius: 11px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .cancel-btn {
+            border: 1px solid #e3dceb;
+
+            background: white;
+
+            color: #746985;
+        }
+
+        .save-btn {
+            border: none;
+
+            background: linear-gradient(
+                135deg,
+                #762ce5,
+                #8b3df0
+            );
+
+            color: white;
+        }
+
+        /* ================================
+           TOAST
+        ================================= */
+
+        .toast {
+            position: fixed;
+
+            right: 25px;
+            bottom: 25px;
+
+            min-width: 280px;
+
+            padding: 15px 18px;
+
+            border-radius: 13px;
+
+            background: #291b47;
+
+            color: white;
+
+            font-size: 13px;
+
+            box-shadow: 0 15px 40px rgba(30,15,60,0.2);
+
+            transform: translateY(120px);
+
+            opacity: 0;
+
+            transition: 0.3s;
+
+            z-index: 2000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* ================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 1100px) {
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 220px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+                padding: 30px 20px;
+            }
+
+            .top-header {
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .header-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .dashboard {
+                display: block;
+            }
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+                min-height: auto;
+
+                padding: 22px 18px;
+            }
+
+            .brand {
+                margin-bottom: 25px;
+            }
+
+            .menu {
+                flex-direction: row;
+            }
+
+            .menu-item {
+                flex: 1;
+                justify-content: center;
+                padding: 0 8px;
+            }
+
+            .menu-item span:not(.menu-icon) {
+                display: none;
+            }
+
+            .sidebar-bottom {
+                margin-top: 20px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+
+                padding: 25px 16px;
+            }
+
+            .top-header {
+                flex-direction: column;
+            }
+
+            .header-actions {
+                width: 100%;
+                flex-direction: row;
+            }
+
+            .add-task-btn {
+                flex: 1;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 18px;
+            }
+
+            .stat-number {
+                font-size: 26px;
+            }
+
+            .task-item {
+                align-items: flex-start;
+            }
+
+            .task-actions {
+                flex-direction: column;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div>
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    ✓
+                </div>
+
+                <div class="brand-text">
+                    <h1>TaskFlow</h1>
+                    <span>TASK MANAGEMENT</span>
+                </div>
+
+            </div>
+
+
+            <div class="menu-title">
+                MAIN MENU
+            </div>
+
+
+            <nav class="menu">
+
+                <a href="/tasks/" class="menu-item active">
+
+                    <span class="menu-icon">▦</span>
+
+                    <span>Dashboard</span>
+
+                </a>
+
+
+                <a href="/tasks/" class="menu-item">
+
+                    <span class="menu-icon">✓</span>
+
+                    <span>My Tasks</span>
+
+                </a>
+
+            </nav>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="user-profile">
+
+                <div class="avatar">
+                    {{ request.user.username|first|upper }}
+                </div>
+
+                <div class="user-info">
+
+                    <div class="username">
+                        {{ request.user.username }}
+                    </div>
+
+                    <div class="user-status">
+                        Active account
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <a href="/accounts/logout/" class="logout">
+                ↪ &nbsp; Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="main-content">
+
+        <!-- HEADER -->
+
+        <header class="top-header">
+
+            <div class="welcome">
+
+                <h2>
+                    Good day, {{ request.user.username }}! 👋
+                </h2>
+
+                <p>
+                    Here's what's happening with your tasks today.
+                </p>
+
+            </div>
+
+
+            <div class="header-actions">
+
+                <div class="date-box" id="currentDate">
+                    Loading...
+                </div>
+
+                <button
+                    type="button"
+                    class="add-task-btn"
+                    onclick="openAddModal()">
+
+                    + Add Task
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             STATISTICS
+        ========================== -->
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <div>
+
+                    <div class="stat-label">
+                        Total Tasks
+                    </div>
+
+                    <div class="stat-number" id="totalTasks">
+                        0
+                    </div>
+
+                    <div class="stat-description">
+                        All your tasks
+                    </div>
+
+                </div>
+
+                <div class="stat-icon">
+                    📋
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div>
+
+                    <div class="stat-label">
+                        Pending
+                    </div>
+
+                    <div class="stat-number" id="pendingTasks">
+                        0
+                    </div>
+
+                    <div class="stat-description">
+                        Waiting to start
+                    </div>
+
+                </div>
+
+                <div class="stat-icon pending-icon">
+                    ⏳
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div>
+
+                    <div class="stat-label">
+                        In Progress
+                    </div>
+
+                    <div class="stat-number" id="progressTasks">
+                        0
+                    </div>
+
+                    <div class="stat-description">
+                        Currently working
+                    </div>
+
+                </div>
+
+                <div class="stat-icon progress-icon">
+                    ⚡
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div>
+
+                    <div class="stat-label">
+                        Completed
+                    </div>
+
+                    <div class="stat-number" id="completedTasks">
+                        0
+                    </div>
+
+                    <div class="stat-description">
+                        Successfully finished
+                    </div>
+
+                </div>
+
+                <div class="stat-icon completed-icon">
+                    ✓
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CONTENT
+        ========================== -->
+
+        <section class="content-grid">
+
+
+            <!-- TASKS -->
+
+            <div class="card tasks-card">
+
+                <div class="card-header">
+
+                    <h3>
+                        My Tasks
+                    </h3>
+
+                    <span>
+                        Latest tasks
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="task-list"
+                    id="taskList">
+
+                    <div class="empty-state">
+
+                        <div class="empty-icon">
+                            ⏳
+                        </div>
+
+                        <h3>
+                            Loading tasks...
+                        </h3>
+
+                        <p>
+                            Please wait.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT COLUMN -->
+
+            <div class="side-column">
+
+
+                <!-- PROGRESS -->
+
+                <div class="card progress-card">
+
+                    <div class="progress-heading">
+
+                        <h3>
+                            Overall Progress
+                        </h3>
+
+                        <span
+                            class="progress-percent"
+                            id="progressPercent">
+
+                            0%
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress-bar">
+
+                        <div
+                            class="progress-fill"
+                            id="progressFill">
+
+                        </div>
+
+                    </div>
+
+
+                    <p class="progress-text">
+                        Based on your completed tasks
+                    </p>
+
+                </div>
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="card quick-card">
+
+                    <h3>
+                        Quick Actions
+                    </h3>
+
+
+                    <button
+                        type="button"
+                        class="quick-action"
+                        onclick="openAddModal()">
+
+                        <div class="quick-icon">
+                            +
+                        </div>
+
+                        <div class="quick-text">
+
+                            <strong>
+                                Create a new task
+                            </strong>
+
+                            <span>
+                                Add something to your list
+                            </span>
+
+                        </div>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="quick-action"
+                        onclick="loadTasks()">
+
+                        <div class="quick-icon">
+                            ↻
+                        </div>
+
+                        <div class="quick-text">
+
+                            <strong>
+                                Refresh tasks
+                            </strong>
+
+                            <span>
+                                Get the latest updates
+                            </span>
+
+                        </div>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================
+     ADD / EDIT MODAL
+========================== -->
+
+<div
+    class="modal"
+    id="taskModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2 id="modalTitle">
+                Add New Task
+            </h2>
+
+            <button
+                type="button"
+                class="close-modal"
+                onclick="closeModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="taskForm">
+
+
+            <div class="form-group">
+
+                <label>
+                    Task Title
+                </label>
+
+                <input
+                    type="text"
+                    id="taskTitle"
+                    placeholder="Enter task title"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Description
+                </label>
+
+                <textarea
+                    id="taskDescription"
+                    placeholder="Describe your task..."></textarea>
+
+            </div>
+
+
+            <div class="form-row">
+
+
+                <div class="form-group">
+
+                    <label>
+                        Status
+                    </label>
+
+                    <select id="taskStatus">
+
+                        <option value="pending">
+                            Pending
+                        </option>
+
+                        <option value="in_progress">
+                            In Progress
+                        </option>
+
+                        <option value="completed">
+                            Completed
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Priority
+                    </label>
+
+                    <select id="taskPriority">
+
+                        <option value="low">
+                            Low
+                        </option>
+
+                        <option value="medium" selected>
+                            Medium
+                        </option>
+
+                        <option value="high">
+                            High
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Due Date
+                </label>
+
+                <input
+                    type="date"
+                    id="taskDueDate">
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="closeModal()">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-btn">
+
+                    Save Task
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+    class="toast"
+    id="toast">
+
+    Task saved successfully.
+
+</div>
+
+
+<script>
+
+    /* ==================================
+       VARIABLES
+    ================================== */
+
+    let tasks = [];
+
+    let editingTaskId = null;
+
+
+    /* ==================================
+       CSRF TOKEN
+    ================================== */
+
+    function getCookie(name) {
+
+        let cookieValue = null;
+
+        if (document.cookie && document.cookie !== "") {
+
+            const cookies = document.cookie.split(";");
+
+            for (let cookie of cookies) {
+
+                cookie = cookie.trim();
+
+                if (cookie.startsWith(name + "=")) {
+
+                    cookieValue =
+                        decodeURIComponent(
+                            cookie.substring(name.length + 1)
+                        );
+
+                    break;
+                }
+            }
+        }
+
+        return cookieValue;
+    }
+
+
+    /* ==================================
+       DATE
+    ================================== */
+
+    function showDate() {
+
+        const today = new Date();
+
+        const options = {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        };
+
+        document.getElementById("currentDate").textContent =
+            today.toLocaleDateString("en-GB", options);
+
+    }
+
+
+    /* ==================================
+       TOAST
+    ================================== */
+
+    function showToast(message) {
+
+        const toast =
+            document.getElementById("toast");
+
+        toast.textContent = message;
+
+        toast.classList.add("show");
+
+        setTimeout(() => {
+
+            toast.classList.remove("show");
+
+        }, 2500);
+
+    }
+
+
+    /* ==================================
+       LOAD TASKS
+    ================================== */
+
+    async function loadTasks() {
+
+        const taskList =
+            document.getElementById("taskList");
+
+        try {
+
+            const response =
+                await fetch("/tasks/api/tasks/");
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Could not load tasks"
+                );
+
+            }
+
+            const data =
+                await response.json();
+
+            /*
+             * Supports:
+             * [ ... ]
+             * {tasks: [...]}
+             */
+
+            if (Array.isArray(data)) {
+
+                tasks = data;
+
+            } else if (Array.isArray(data.tasks)) {
+
+                tasks = data.tasks;
+
+            } else {
+
+                tasks = [];
+
+            }
+
+            renderTasks();
+
+            updateStatistics();
+
+        } catch (error) {
+
+            console.error(error);
+
+            taskList.innerHTML = `
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        Unable to load tasks
+                    </h3>
+
+                    <p>
+                        Please refresh the page.
+                    </p>
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+
+    /* ==================================
+       RENDER TASKS
+    ================================== */
+
+    function renderTasks() {
+
+        const taskList =
+            document.getElementById("taskList");
+
+        if (!tasks.length) {
+
+            taskList.innerHTML = `
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        No tasks yet
+                    </h3>
+
+                    <p>
+                        Create your first task to get started.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        taskList.innerHTML = tasks.map(task => {
+
+            const status =
+                String(task.status || "pending")
+                    .toLowerCase()
+                    .replaceAll(" ", "_");
+
+
+            const priority =
+                String(task.priority || "medium")
+                    .toLowerCase();
+
+
+            let statusText =
+                "Pending";
+
+            if (status === "in_progress") {
+                statusText = "In Progress";
+            }
+
+            if (status === "completed") {
+                statusText = "Completed";
+            }
+
+
+            const isCompleted =
+                status === "completed";
+
+
+            const description =
+                task.description ||
+                "No description provided.";
+
+
+            const dueDate =
+                task.due_date
+                    ? formatDate(task.due_date)
+                    : "No due date";
+
+
+            return `
+
+                <div class="task-item">
+
+                    <button
+                        type="button"
+                        class="task-check ${isCompleted ? "completed" : ""}"
+                        onclick="toggleTask(${task.id}, '${status}')">
+
+                        ${isCompleted ? "✓" : ""}
+
+                    </button>
+
+
+                    <div class="task-main">
+
+                        <div
+                            class="task-title ${isCompleted ? "completed" : ""}">
+
+                            ${escapeHtml(task.title)}
+
+                        </div>
+
+
+                        <div class="task-description">
+
+                            ${escapeHtml(description)}
+
+                        </div>
+
+
+                        <div class="task-meta">
+
+                            <span
+                                class="badge status-${status.replace("_", "-")}">
+
+                                ${statusText}
+
+                            </span>
+
+
+                            <span
+                                class="badge priority-${priority}">
+
+                                ${capitalize(priority)}
+
+                            </span>
+
+
+                            <span class="due-date">
+
+                                📅 ${dueDate}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="task-actions">
+
+                        <button
+                            type="button"
+                            class="icon-btn edit-btn"
+                            onclick="openEditModal(${task.id})"
+                            title="Edit">
+
+                            ✏️
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="icon-btn delete-btn"
+                            onclick="deleteTask(${task.id})"
+                            title="Delete">
+
+                            🗑️
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+    }
+
+
+    /* ==================================
+       STATISTICS
+    ================================== */
+
+    function updateStatistics() {
+
+        const total =
+            tasks.length;
+
+
+        const pending =
+            tasks.filter(
+                task =>
+                    String(task.status).toLowerCase() === "pending"
+            ).length;
+
+
+        const inProgress =
+            tasks.filter(
+                task =>
+                    String(task.status).toLowerCase()
+                    === "in_progress"
+            ).length;
+
+
+        const completed =
+            tasks.filter(
+                task =>
+                    String(task.status).toLowerCase()
+                    === "completed"
+            ).length;
+
+
+        document.getElementById("totalTasks")
+            .textContent = total;
+
+
+        document.getElementById("pendingTasks")
+            .textContent = pending;
+
+
+        document.getElementById("progressTasks")
+            .textContent = inProgress;
+
+
+        document.getElementById("completedTasks")
+            .textContent = completed;
+
+
+        const percentage =
+            total > 0
+                ? Math.round((completed / total) * 100)
+                : 0;
+
+
+        document.getElementById("progressPercent")
+            .textContent = percentage + "%";
+
+
+        document.getElementById("progressFill")
+            .style.width = percentage + "%";
+
+    }
+
+
+    /* ==================================
+       OPEN ADD MODAL
+    ================================== */
+
+    function openAddModal() {
+
+        editingTaskId = null;
+
+        document.getElementById("modalTitle")
+            .textContent = "Add New Task";
+
+
+        document.getElementById("taskForm")
+            .reset();
+
+
+        document.getElementById("taskStatus")
+            .value = "pending";
+
+
+        document.getElementById("taskPriority")
+            .value = "medium";
+
+
+        document.getElementById("taskModal")
+            .classList.add("show");
+
+    }
+
+
+    /* ==================================
+       OPEN EDIT MODAL
+    ================================== */
+
+    function openEditModal(taskId) {
+
+        const task =
+            tasks.find(
+                item => Number(item.id) === Number(taskId)
+            );
+
+
+        if (!task) {
+
+            showToast("Task not found.");
+
+            return;
+
+        }
+
+
+        editingTaskId = taskId;
+
+
+        document.getElementById("modalTitle")
+            .textContent = "Edit Task";
+
+
+        document.getElementById("taskTitle")
+            .value = task.title || "";
+
+
+        document.getElementById("taskDescription")
+            .value = task.description || "";
+
+
+        document.getElementById("taskStatus")
+            .value = task.status || "pending";
+
+
+        document.getElementById("taskPriority")
+            .value = task.priority || "medium";
+
+
+        document.getElementById("taskDueDate")
+            .value = task.due_date || "";
+
+
+        document.getElementById("taskModal")
+            .classList.add("show");
+
+    }
+
+
+    /* ==================================
+       CLOSE MODAL
+    ================================== */
+
+    function closeModal() {
+
+        document.getElementById("taskModal")
+            .classList.remove("show");
+
+        editingTaskId = null;
+
+    }
+
+
+    /* ==================================
+       SAVE TASK
+    ================================== */
+
+    document.getElementById("taskForm")
+        .addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+
+            const title =
+                document.getElementById("taskTitle")
+                    .value.trim();
+
+
+            const description =
+                document.getElementById("taskDescription")
+                    .value.trim();
+
+
+            const status =
+                document.getElementById("taskStatus")
+                    .value;
+
+
+            const priority =
+                document.getElementById("taskPriority")
+                    .value;
+
+
+            const dueDate =
+                document.getElementById("taskDueDate")
+                    .value;
+
+
+            if (!title) {
+
+                showToast("Please enter a task title.");
+
+                return;
+
+            }
+
+
+            const payload = {
+
+                title: title,
+
+                description: description,
+
+                status: status,
+
+                priority: priority,
+
+                due_date: dueDate || null
+
+            };
+
+
+            try {
+
+                let url = "";
+
+                let method = "POST";
+
+
+                if (editingTaskId) {
+
+                    url =
+                        `/tasks/api/tasks/${editingTaskId}/update/`;
+
+                    method = "PUT";
+
+                } else {
+
+                    url =
+                        "/tasks/api/tasks/create/";
+
+                }
+
+
+                const response =
+                    await fetch(url, {
+
+                        method: method,
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "X-CSRFToken":
+                                getCookie("csrftoken")
+
+                        },
+
+                        body:
+                            JSON.stringify(payload)
+
+                    });
+
+
+                const result =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    console.error(result);
+
+                    throw new Error(
+                        result.message ||
+                        "Unable to save task"
+                    );
+
+                }
+
+
+                closeModal();
+
+                showToast(
+                    editingTaskId
+                        ? "Task updated successfully!"
+                        : "Task added successfully!"
+                );
+
+
+                await loadTasks();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                showToast(
+                    error.message ||
+                    "Something went wrong."
+                );
+
+            }
+
+        });
+
+
+    /* ==================================
+       TOGGLE COMPLETED
+    ================================== */
+
+    async function toggleTask(taskId, currentStatus) {
+
+        const task =
+            tasks.find(
+                item => Number(item.id) === Number(taskId)
+            );
+
+
+        if (!task) return;
+
+
+        const newStatus =
+            currentStatus === "completed"
+                ? "pending"
+                : "completed";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/tasks/api/tasks/${taskId}/update/`,
+                    {
+
+                        method: "PUT",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "X-CSRFToken":
+                                getCookie("csrftoken")
+
+                        },
+
+                        body: JSON.stringify({
+
+                            title: task.title,
+
+                            description:
+                                task.description || "",
+
+                            status: newStatus,
+
+                            priority:
+                                task.priority || "medium",
+
+                            due_date:
+                                task.due_date || null
+
+                        })
+
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to update task"
+                );
+
+            }
+
+
+            await loadTasks();
+
+            showToast(
+                newStatus === "completed"
+                    ? "Task completed!"
+                    : "Task moved to pending."
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            showToast(
+                "Unable to update task."
+            );
+
+        }
+
+    }
+
+
+    /* ==================================
+       DELETE TASK
+    ================================== */
+
+    async function deleteTask(taskId) {
+
+        const confirmDelete =
+            confirm(
+                "Are you sure you want to delete this task?"
+            );
+
+
+        if (!confirmDelete) return;
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/tasks/api/tasks/${taskId}/delete/`,
+                    {
+
+                        method: "DELETE",
+
+                        headers: {
+
+                            "X-CSRFToken":
+                                getCookie("csrftoken")
+
+                        }
+
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to delete task"
+                );
+
+            }
+
+
+            showToast(
+                "Task deleted successfully!"
+            );
+
+
+            await loadTasks();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            showToast(
+                "Unable to delete task."
+            );
+
+        }
+
+    }
+
+
+    /* ==================================
+       FORMAT DATE
+    ================================== */
+
+    function formatDate(dateString) {
+
+        if (!dateString) {
+            return "No date";
+        }
+
+
+        const date =
+            new Date(dateString);
+
+
+        if (isNaN(date.getTime())) {
+            return dateString;
+        }
+
+
+        return date.toLocaleDateString(
+            "en-GB",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
+        );
+
+    }
+
+
+    /* ==================================
+       CAPITALIZE
+    ================================== */
+
+    function capitalize(text) {
+
+        if (!text) return "";
+
+        return text.charAt(0).toUpperCase()
+            + text.slice(1);
+
+    }
+
+
+    /* ==================================
+       ESCAPE HTML
+    ================================== */
+
+    function escapeHtml(value) {
+
+        if (value === null ||
+            value === undefined) {
+
+            return "";
+
+        }
+
+
+        return String(value)
+
+            .replace(/&/g, "&amp;")
+
+            .replace(/</g, "&lt;")
+
+            .replace(/>/g, "&gt;")
+
+            .replace(/"/g, "&quot;")
+
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* ==================================
+       CLOSE MODAL WHEN CLICK OUTSIDE
+    ================================== */
+
+    document.getElementById("taskModal")
+        .addEventListener("click", function(event) {
+
+            if (event.target === this) {
+
+                closeModal();
+
+            }
+
+        });
+
+
+    /* ==================================
+       INITIALIZE
+    ================================== */
+
+    showDate();
+
+    loadTasks();
+
+</script>
+
+</body>
+</html>

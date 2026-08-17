@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login | Task Manager</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4c1d95 0%,
+                    #6d28d9 35%,
+                    #9333ea 70%,
+                    #c026d3 100%
+                );
+
+            position: relative;
+        }
+
+
+        /* =========================
+           BACKGROUND CIRCLES
+        ========================= */
+
+        .circle {
+
+            position: absolute;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255, 255, 255, 0.10);
+
+            backdrop-filter: blur(5px);
+
+            animation: float 8s ease-in-out infinite;
+
+        }
+
+
+        .circle-one {
+
+            width: 280px;
+            height: 280px;
+
+            top: -100px;
+            left: -80px;
+
+        }
+
+
+        .circle-two {
+
+            width: 220px;
+            height: 220px;
+
+            right: -60px;
+            bottom: -60px;
+
+            animation-delay: 2s;
+
+        }
+
+
+        .circle-three {
+
+            width: 100px;
+            height: 100px;
+
+            right: 18%;
+            top: 12%;
+
+            animation-delay: 4s;
+
+        }
+
+
+        @keyframes float {
+
+            0%,
+            100% {
+
+                transform:
+                    translateY(0px);
+
+            }
+
+            50% {
+
+                transform:
+                    translateY(-20px);
+
+            }
+
+        }
+
+
+        /* =========================
+           LOGIN CONTAINER
+        ========================= */
+
+        .login-wrapper {
+
+            width: 920px;
+
+            max-width: 92%;
+
+            min-height: 570px;
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            background:
+                rgba(255, 255, 255, 0.14);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.25);
+
+            border-radius: 30px;
+
+            overflow: hidden;
+
+            backdrop-filter: blur(25px);
+
+            -webkit-backdrop-filter:
+                blur(25px);
+
+            box-shadow:
+                0 30px 80px
+                rgba(0, 0, 0, 0.30);
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        /* =========================
+           LEFT SIDE
+        ========================= */
+
+        .welcome-section {
+
+            padding: 55px;
+
+            color: white;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            position: relative;
+
+            background:
+                rgba(255, 255, 255, 0.06);
+        }
+
+
+        .logo {
+
+            width: 68px;
+            height: 68px;
+
+            border-radius: 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                rgba(255, 255, 255, 0.18);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.30);
+
+            font-size: 32px;
+
+            font-weight: bold;
+
+            margin-bottom: 30px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0, 0, 0, 0.12);
+        }
+
+
+        .welcome-section h1 {
+
+            font-size: 42px;
+
+            line-height: 1.15;
+
+            margin-bottom: 18px;
+
+            letter-spacing: -1px;
+        }
+
+
+        .welcome-section h1 span {
+
+            color: #f5d0fe;
+
+        }
+
+
+        .welcome-section p {
+
+            font-size: 16px;
+
+            line-height: 1.7;
+
+            color:
+                rgba(255, 255, 255, 0.82);
+
+            max-width: 360px;
+
+        }
+
+
+        .features {
+
+            margin-top: 35px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 15px;
+        }
+
+
+        .feature {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            font-size: 14px;
+
+            color:
+                rgba(255, 255, 255, 0.90);
+        }
+
+
+        .feature-icon {
+
+            width: 30px;
+            height: 30px;
+
+            border-radius: 9px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                rgba(255, 255, 255, 0.15);
+        }
+
+
+        /* =========================
+           RIGHT LOGIN SIDE
+        ========================= */
+
+        .login-section {
+
+            background:
+                rgba(255, 255, 255, 0.97);
+
+            padding: 55px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+        }
+
+
+        .login-section h2 {
+
+            font-size: 30px;
+
+            color: #24123f;
+
+            margin-bottom: 8px;
+        }
+
+
+        .login-subtitle {
+
+            color: #8b8498;
+
+            font-size: 14px;
+
+            margin-bottom: 32px;
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+
+            margin-bottom: 20px;
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            color: #4b4258;
+
+            margin-bottom: 8px;
+        }
+
+
+        .input-wrapper {
+
+            position: relative;
+        }
+
+
+        .input-icon {
+
+            position: absolute;
+
+            left: 15px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color: #9a7ac7;
+
+            font-size: 18px;
+
+            pointer-events: none;
+        }
+
+
+        .input-wrapper input {
+
+            width: 100%;
+
+            height: 52px;
+
+            border: 1px solid #e6dff0;
+
+            border-radius: 13px;
+
+            padding:
+                0 45px 0 45px;
+
+            font-size: 14px;
+
+            color: #30263b;
+
+            background: #faf8fc;
+
+            transition: 0.25s;
+        }
+
+
+        .input-wrapper input:focus {
+
+            outline: none;
+
+            border-color: #8b3dff;
+
+            background: white;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(139, 61, 255, 0.10);
+        }
+
+
+        .input-wrapper input::placeholder {
+
+            color: #b1a9ba;
+        }
+
+
+        /* =========================
+           PASSWORD BUTTON
+        ========================= */
+
+        .password-toggle {
+
+            position: absolute;
+
+            right: 14px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            border: none;
+
+            background: transparent;
+
+            cursor: pointer;
+
+            color: #9b8ca8;
+
+            font-size: 17px;
+        }
+
+
+        .password-toggle:hover {
+
+            color: #7b2ff7;
+
+        }
+
+
+        /* =========================
+           OPTIONS
+        ========================= */
+
+        .options {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+
+            font-size: 13px;
+        }
+
+
+        .remember {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            color: #777;
+        }
+
+
+        .remember input {
+
+            accent-color: #7b2ff7;
+
+        }
+
+
+        .forgot {
+
+            color: #7b2ff7;
+
+            text-decoration: none;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================
+           LOGIN BUTTON
+        ========================= */
+
+        .login-btn {
+
+            width: 100%;
+
+            height: 53px;
+
+            border: none;
+
+            border-radius: 13px;
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7b2ff7,
+                    #a855f7
+                );
+
+            box-shadow:
+                0 10px 25px
+                rgba(123, 47, 247, 0.28);
+
+            transition: 0.25s;
+        }
+
+
+        .login-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 15px 30px
+                rgba(123, 47, 247, 0.35);
+        }
+
+
+        .login-btn:active {
+
+            transform:
+                translateY(0);
+
+        }
+
+
+        /* =========================
+           SIGNUP
+        ========================= */
+
+        .signup-text {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #8b8498;
+
+            font-size: 14px;
+        }
+
+
+        .signup-text a {
+
+            color: #7b2ff7;
+
+            font-weight: 700;
+
+            text-decoration: none;
+
+        }
+
+
+        .signup-text a:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        /* =========================
+           ERROR MESSAGE
+        ========================= */
+
+        .error-message {
+
+            background: #fff0f1;
+
+            border: 1px solid #ffd5d8;
+
+            color: #d64550;
+
+            padding: 10px 12px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+
+            margin-bottom: 18px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 750px) {
+
+            body {
+
+                overflow-y: auto;
+
+                padding: 25px 0;
+
+            }
+
+
+            .login-wrapper {
+
+                grid-template-columns: 1fr;
+
+                min-height: auto;
+
+                border-radius: 24px;
+
+            }
+
+
+            .welcome-section {
+
+                padding: 35px;
+
+                text-align: center;
+
+                align-items: center;
+
+            }
+
+
+            .welcome-section h1 {
+
+                font-size: 32px;
+
+            }
+
+
+            .welcome-section p {
+
+                max-width: 100%;
+
+            }
+
+
+            .features {
+
+                display: none;
+
+            }
+
+
+            .login-section {
+
+                padding: 35px;
+
+            }
+
+        }
+
+
+        @media (max-width: 450px) {
+
+            .welcome-section,
+            .login-section {
+
+                padding: 28px 22px;
+
+            }
+
+
+            .welcome-section h1 {
+
+                font-size: 28px;
+
+            }
+
+
+            .login-section h2 {
+
+                font-size: 25px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- Background -->
+
+    <div class="circle circle-one"></div>
+
+    <div class="circle circle-two"></div>
+
+    <div class="circle circle-three"></div>
+
+
+    <!-- Login Card -->
+
+    <div class="login-wrapper">
+
+
+        <!-- LEFT -->
+
+        <div class="welcome-section">
+
+
+            <div class="logo">
+                ✓
+            </div>
+
+
+            <h1>
+
+                Welcome to
+
+                <span>
+                    Task Manager
+                </span>
+
+            </h1>
+
+
+            <p>
+
+                Organize your work, manage your
+                tasks, and achieve your goals —
+                all from one beautiful workspace.
+
+            </p>
+
+
+            <div class="features">
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        ✓
+                    </div>
+
+                    Easy task management
+
+                </div>
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        ✓
+                    </div>
+
+                    Track your progress
+
+                </div>
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        ✓
+                    </div>
+
+                    Stay productive every day
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT -->
+
+        <div class="login-section">
+
+
+            <h2>
+                Welcome Back 👋
+            </h2>
+
+
+            <p class="login-subtitle">
+
+                Sign in to continue to your dashboard
+
+            </p>
+
+
+            {% if form.errors %}
+
+                <div class="error-message">
+
+                    Username or password is incorrect.
+                    Please try again.
+
+                </div>
+
+            {% endif %}
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <!-- USERNAME -->
+
+                <div class="form-group">
+
+                    <label>
+                        Username
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            👤
+                        </span>
+
+
+                        <input
+                            type="text"
+                            name="username"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label>
+                        Password
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            🔒
+                        </span>
+
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword()"
+                            id="toggleButton"
+                        >
+                            👁
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- OPTIONS -->
+
+                <div class="options">
+
+
+                    <label class="remember">
+
+                        <input
+                            type="checkbox"
+                            name="remember"
+                        >
+
+                        Remember me
+
+                    </label>
+
+
+                    <a
+                        href="#"
+                        class="forgot"
+                    >
+                        Forgot password?
+                    </a>
+
+
+                </div>
+
+
+                <!-- LOGIN -->
+
+                <button
+                    type="submit"
+                    class="login-btn"
+                >
+
+                    Login to Dashboard →
+
+                </button>
+
+
+            </form>
+
+
+            <!-- SIGNUP -->
+
+            <p class="signup-text">
+
+                Don't have an account?
+
+                <a href="{% url 'signup' %}">
+                    Create Account
+                </a>
+
+            </p>
+
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        function togglePassword() {
+
+            const password =
+                document.getElementById(
+                    "password"
+                );
+
+            const button =
+                document.getElementById(
+                    "toggleButton"
+                );
+
+
+            if (
+                password.type === "password"
+            ) {
+
+                password.type = "text";
+
+                button.textContent = "🙈";
+
+            } else {
+
+                password.type = "password";
+
+                button.textContent = "👁";
+
+            }
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
